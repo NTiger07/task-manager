@@ -61,15 +61,15 @@ export default function TaskCard({
             {...listeners}
             aria-label="Drag to reorder"
             title="Drag to reorder"
-            className="mt-0.5 -ml-1 p-1 text-slate-300 hover:text-slate-500 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+            className="mt-0.5 -ml-1 p-1.5 rounded-lg text-emerald-600 hover:text-emerald-700 cursor-grab active:cursor-grabbing transition-all flex-shrink-0 active:scale-95 shadow-2xs"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <circle cx="9" cy="5" r="1.5" />
-              <circle cx="15" cy="5" r="1.5" />
-              <circle cx="9" cy="12" r="1.5" />
-              <circle cx="15" cy="12" r="1.5" />
-              <circle cx="9" cy="19" r="1.5" />
-              <circle cx="15" cy="19" r="1.5" />
+              <circle cx="9" cy="5" r="2" />
+              <circle cx="15" cy="5" r="2" />
+              <circle cx="9" cy="12" r="2" />
+              <circle cx="15" cy="12" r="2" />
+              <circle cx="9" cy="19" r="2" />
+              <circle cx="15" cy="19" r="2" />
             </svg>
           </button>
         )}
