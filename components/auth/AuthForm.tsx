@@ -94,7 +94,7 @@ export default function AuthForm({ view }: AuthFormProps) {
             sign_in: {
               email_label: 'Email address',
               password_label: 'Password',
-              button_label: 'Sign in to TaskFlow',
+              button_label: 'Sign in to Stride',
               loading_button_label: 'Signing in…',
               email_input_placeholder: 'you@example.com',
               password_input_placeholder: '••••••••',

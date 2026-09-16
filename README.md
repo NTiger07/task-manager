@@ -1,4 +1,4 @@
-# TaskFlow — Task Management Application
+# Stride — Task Management Application
 
 A full-stack task management app built as part of a SWE internship assessment.
 

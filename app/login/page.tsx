@@ -8,8 +8,8 @@ import AuthForm from '@/components/auth/AuthForm'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Sign in — TaskFlow',
-  description: 'Sign in to your TaskFlow account to manage your tasks.',
+  title: 'Sign in — Stride',
+  description: 'Sign in to your Stride account to manage your tasks.',
 }
 
 export default function LoginPage() {

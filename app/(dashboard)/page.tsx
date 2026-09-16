@@ -7,7 +7,7 @@ import type { Task } from '@/lib/types'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Board — TaskFlow',
+  title: 'Board — Stride',
   description: 'Manage your tasks on your personal board.',
 }
 

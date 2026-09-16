@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Task Not Found — TaskFlow',
+  title: 'Task Not Found — Stride',
 }
 
 export default function NotFound() {

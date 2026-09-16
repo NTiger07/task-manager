@@ -9,8 +9,8 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'TaskFlow — Task Management',
-  description: 'A simple and minimal task management app.',
+  title: 'Stride',
+  description: 'A fast, minimal task management app.',
 }
 
 export default function RootLayout({

@@ -8,8 +8,8 @@ import AuthForm from '@/components/auth/AuthForm'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Create account — TaskFlow',
-  description: 'Create a free TaskFlow account to start managing your tasks.',
+  title: 'Create account — Stride',
+  description: 'Create a free Stride account to start managing your tasks.',
 }
 
 export default function SignupPage() {
@@ -25,7 +25,7 @@ export default function SignupPage() {
             Create your account
           </h1>
           <p className="text-slate-500 mt-2 text-sm">
-            Start organizing your tasks with TaskFlow
+            Start organizing your tasks with Stride
           </p>
         </div>
 

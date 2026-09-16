@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const supabase = await createClient()
   const { data } = await supabase.from('tasks').select('title').eq('id', id).single()
   return {
-    title: data ? `${data.title} — TaskFlow` : 'Task — TaskFlow',
+    title: data ? `${data.title} — Stride` : 'Task — Stride',
   }
 }
 
