@@ -41,7 +41,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
 
-  const { title, description, status = 'todo', due_date } = body
+  const { title, description, due_date } = body
+  const status = 'todo'
 
   if (!title || typeof title !== 'string' || title.trim().length === 0) {
     return NextResponse.json({ error: 'Title is required' }, { status: 400 })
@@ -49,11 +50,6 @@ export async function POST(request: Request) {
 
   if (title.trim().length > 255) {
     return NextResponse.json({ error: 'Title must be 255 characters or fewer' }, { status: 400 })
-  }
-
-  const validStatuses = ['todo', 'in_progress', 'done']
-  if (status && !validStatuses.includes(status)) {
-    return NextResponse.json({ error: 'Invalid status' }, { status: 400 })
   }
 
   // Determine max position in the target column

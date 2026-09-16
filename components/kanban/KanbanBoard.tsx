@@ -159,9 +159,9 @@ export default function KanbanBoard({ initialTasks }: KanbanBoardProps) {
   }
 
   // ── CRUD handlers ─────────────────────────────────────────────────────
-  function openCreateModal(status: TaskStatus = 'todo') {
+  function openCreateModal() {
     setModalMode('create')
-    setModalInitial({ status })
+    setModalInitial({ status: 'todo' })
     setEditingTask(null)
     setModalOpen(true)
   }
@@ -236,6 +236,35 @@ export default function KanbanBoard({ initialTasks }: KanbanBoardProps) {
     }
   }
 
+  async function handleStatusChange(taskId: string, newStatus: TaskStatus) {
+    setTasks(prev => prev.map(t => (t.id === taskId ? { ...t, status: newStatus } : t)))
+    try {
+      const res = await fetch(`/api/tasks/${taskId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus }),
+      })
+      if (!res.ok) {
+        const err = await res.json()
+        throw new Error(err.error ?? 'Failed to update status')
+      }
+      const updated: Task = await res.json()
+      setTasks(prev => prev.map(t => (t.id === updated.id ? updated : t)))
+      showToast(
+        `Marked as ${newStatus === 'in_progress' ? 'In Progress' : 'Done'}`,
+        'success'
+      )
+    } catch (err) {
+      showToast(err instanceof Error ? err.message : 'Failed to update status', 'error')
+      // Rollback on failure
+      const res = await fetch('/api/tasks')
+      if (res.ok) {
+        const data = await res.json()
+        setTasks(data)
+      }
+    }
+  }
+
   return (
     <div className="flex flex-col gap-6">
       {/* ── Dynamic Dashboard Controls Bar ── */}
@@ -294,7 +323,7 @@ export default function KanbanBoard({ initialTasks }: KanbanBoardProps) {
 
           <button
             id="global-add-task-btn"
-            onClick={() => openCreateModal('todo')}
+            onClick={openCreateModal}
             className="flex-shrink-0 inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-[#00e676] hover:bg-[#00c853] text-slate-950 shadow-sm hover:shadow transition-all duration-150 cursor-pointer"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
@@ -338,6 +367,7 @@ export default function KanbanBoard({ initialTasks }: KanbanBoardProps) {
               onAddTask={openCreateModal}
               onEditTask={openEditModal}
               onDeleteTask={requestDelete}
+              onStatusChange={handleStatusChange}
             />
           ))}
         </div>

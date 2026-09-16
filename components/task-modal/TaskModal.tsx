@@ -108,6 +108,8 @@ export default function TaskModal({
 
         {/* Form body + footer */}
         <TaskForm
+          key={mode === 'create' ? 'create' : (initialValues?.title ?? 'edit')}
+          mode={mode}
           initialValues={initialValues}
           onSubmit={onSubmit}
           onCancel={onClose}

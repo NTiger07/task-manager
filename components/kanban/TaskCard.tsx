@@ -7,12 +7,13 @@ import { CSS } from '@dnd-kit/utilities'
 import Link from 'next/link'
 import StatusBadge from '@/components/StatusBadge'
 import DueDateIndicator from '@/components/DueDateIndicator'
-import type { Task } from '@/lib/types'
+import type { Task, TaskStatus } from '@/lib/types'
 
 interface TaskCardProps {
   task: Task
   onEdit: (task: Task) => void
   onDelete: (taskId: string) => void
+  onStatusChange?: (taskId: string, newStatus: TaskStatus) => void
   isDragOverlay?: boolean
 }
 
@@ -20,6 +21,7 @@ export default function TaskCard({
   task,
   onEdit,
   onDelete,
+  onStatusChange,
   isDragOverlay = false,
 }: TaskCardProps) {
   const {
@@ -128,6 +130,56 @@ export default function TaskCard({
         <DueDateIndicator dueDate={task.due_date} compact />
         <StatusBadge status={task.status} size="sm" />
       </div>
+
+      {/* Quick Status Action Buttons */}
+      {!isDragOverlay && onStatusChange && task.status === 'todo' && (
+        <div className="flex items-center gap-1.5 pt-1">
+          <button
+            onClick={e => {
+              e.stopPropagation()
+              onStatusChange(task.id, 'in_progress')
+            }}
+            aria-label="Mark task as in progress"
+            className="flex-1 text-[11px] font-semibold py-1.5 px-2 rounded-lg bg-blue-50 hover:bg-blue-100/90 text-blue-700 border border-blue-200/70 transition-colors flex items-center justify-center gap-1 cursor-pointer active:scale-[0.98]"
+          >
+            <span>In Progress</span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+          <button
+            onClick={e => {
+              e.stopPropagation()
+              onStatusChange(task.id, 'done')
+            }}
+            aria-label="Mark task as done"
+            className="flex-1 text-[11px] font-semibold py-1.5 px-2 rounded-lg bg-emerald-50 hover:bg-emerald-100/90 text-emerald-800 border border-emerald-200/70 transition-colors flex items-center justify-center gap-1 cursor-pointer active:scale-[0.98]"
+          >
+            <span>Done</span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </button>
+        </div>
+      )}
+
+      {!isDragOverlay && onStatusChange && task.status === 'in_progress' && (
+        <div className="flex items-center pt-1">
+          <button
+            onClick={e => {
+              e.stopPropagation()
+              onStatusChange(task.id, 'done')
+            }}
+            aria-label="Mark task as done"
+            className="w-full text-[11px] font-semibold py-1.5 px-2 rounded-lg bg-emerald-50 hover:bg-emerald-100/90 text-emerald-800 border border-emerald-200/70 transition-colors flex items-center justify-center gap-1.5 cursor-pointer active:scale-[0.98]"
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            <span>Mark as Done</span>
+          </button>
+        </div>
+      )}
     </div>
   )
 }

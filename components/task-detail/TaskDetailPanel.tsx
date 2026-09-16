@@ -17,12 +17,6 @@ interface TaskDetailPanelProps {
   task: Task
 }
 
-const STATUS_LIST: { status: TaskStatus; label: string }[] = [
-  { status: 'todo', label: 'To Do' },
-  { status: 'in_progress', label: 'In Progress' },
-  { status: 'done', label: 'Done' },
-]
-
 export default function TaskDetailPanel({ task: initialTask }: TaskDetailPanelProps) {
   const [task, setTask] = useState<Task>(initialTask)
   const [editOpen, setEditOpen] = useState(false)
@@ -163,30 +157,58 @@ export default function TaskDetailPanel({ task: initialTask }: TaskDetailPanelPr
             </div>
           </div>
 
-          {/* Quick Status Bar */}
+          {/* Quick Status Action Bar */}
           <div className="px-6 sm:px-7 py-3 bg-slate-50 border-b border-slate-100 flex items-center gap-3 flex-wrap">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-              Move to:
+              Status Actions:
             </span>
-            <div className="flex items-center gap-2">
-              {STATUS_LIST.map(({ status, label }) => {
-                const isActive = task.status === status
-                return (
-                  <button
-                    key={status}
-                    onClick={() => handleQuickStatusChange(status)}
-                    disabled={isActive || updatingStatus}
-                    className={`px-3 py-1 text-xs font-semibold rounded-lg transition-all ${
-                      isActive
-                        ? 'bg-white text-slate-900 shadow-xs border border-slate-200 cursor-default'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-white/80 cursor-pointer'
-                    } disabled:opacity-75`}
-                  >
-                    {label}
-                  </button>
-                )
-              })}
-            </div>
+            {task.status === 'todo' && (
+              <div className="flex items-center gap-2">
+                <button
+                  id="action-mark-in-progress"
+                  onClick={() => handleQuickStatusChange('in_progress')}
+                  disabled={updatingStatus}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-50 hover:bg-blue-100/90 text-blue-700 border border-blue-200/80 transition-all cursor-pointer disabled:opacity-50 active:scale-[0.98]"
+                >
+                  <span>Mark as in progress</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </button>
+                <button
+                  id="action-mark-done"
+                  onClick={() => handleQuickStatusChange('done')}
+                  disabled={updatingStatus}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-50 hover:bg-emerald-100/90 text-emerald-800 border border-emerald-200/80 transition-all cursor-pointer disabled:opacity-50 active:scale-[0.98]"
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                  <span>Mark as done</span>
+                </button>
+              </div>
+            )}
+            {task.status === 'in_progress' && (
+              <button
+                id="action-mark-done"
+                onClick={() => handleQuickStatusChange('done')}
+                disabled={updatingStatus}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-50 hover:bg-emerald-100/90 text-emerald-800 border border-emerald-200/80 transition-all cursor-pointer disabled:opacity-50 active:scale-[0.98]"
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                <span>Mark as done</span>
+              </button>
+            )}
+            {task.status === 'done' && (
+              <div className="flex items-center gap-1.5 text-xs font-medium text-emerald-700 bg-emerald-50/80 px-2.5 py-1 rounded-md border border-emerald-200/60">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                <span>Task is completed</span>
+              </div>
+            )}
           </div>
 
           {/* Description */}

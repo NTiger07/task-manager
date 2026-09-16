@@ -8,7 +8,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Board — TaskFlow',
-  description: 'Manage your tasks on your personal Kanban board.',
+  description: 'Manage your tasks on your personal board.',
 }
 
 export default async function DashboardPage() {

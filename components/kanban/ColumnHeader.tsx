@@ -6,7 +6,7 @@ import type { TaskStatus } from '@/lib/types'
 
 const COLUMN_CONFIG: Record<
   TaskStatus,
-  { label: string; accent: string; dot: string; countBg: string; countText: string }
+  { label: string; accent: string; countBg: string; countText: string }
 > = {
   todo: {
     label: 'To Do',
@@ -31,11 +31,11 @@ const COLUMN_CONFIG: Record<
 interface ColumnHeaderProps {
   status: TaskStatus
   count: number
-  onAddTask: () => void
+  onAddTask?: () => void
 }
 
 export default function ColumnHeader({ status, count, onAddTask }: ColumnHeaderProps) {
-  const { label, accent, dot, countBg, countText } = COLUMN_CONFIG[status]
+  const { label, accent, countBg, countText } = COLUMN_CONFIG[status]
 
   return (
     <div className="flex items-center justify-between mb-3 px-1">
@@ -48,18 +48,20 @@ export default function ColumnHeader({ status, count, onAddTask }: ColumnHeaderP
         </span>
       </div>
 
-      <button
-        id={`add-task-${status}`}
-        onClick={onAddTask}
-        aria-label={`Add task to ${label}`}
-        title={`Add task to ${label}`}
-        className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-200/70 active:scale-95 transition-all duration-150 cursor-pointer"
-      >
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
-          <line x1="12" y1="5" x2="12" y2="19" />
-          <line x1="5" y1="12" x2="19" y2="12" />
-        </svg>
-      </button>
+      {status === 'todo' && onAddTask && (
+        <button
+          id={`add-task-${status}`}
+          onClick={onAddTask}
+          aria-label={`Add task to ${label}`}
+          title={`Add task to ${label}`}
+          className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-200/70 active:scale-95 transition-all duration-150 cursor-pointer"
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+        </button>
+      )}
     </div>
   )
 }

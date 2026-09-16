@@ -3,7 +3,7 @@
 // TaskForm — handles field inputs, validation, and submission for tasks.
 // Used inside TaskModal for create/edit operations.
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import FormField from './FormField'
 import type { TaskStatus } from '@/lib/types'
 
@@ -15,6 +15,7 @@ export interface TaskFormValues {
 }
 
 interface TaskFormProps {
+  mode?: 'create' | 'edit'
   initialValues?: Partial<TaskFormValues>
   onSubmit: (values: TaskFormValues) => Promise<void>
   onCancel: () => void
@@ -32,32 +33,22 @@ const inputClass =
   'w-full px-3.5 py-2.5 text-sm text-slate-900 bg-white border border-slate-200 rounded-lg placeholder-slate-400 focus:outline-none focus:border-[#00e676] focus:ring-2 focus:ring-[#00e676]/20 transition-all duration-150'
 
 export default function TaskForm({
+  mode = 'create',
   initialValues,
   onSubmit,
   onCancel,
   submitLabel = 'Create task',
   isLoading = false,
 }: TaskFormProps) {
+  const isCreate = mode === 'create'
+
   const [values, setValues] = useState<TaskFormValues>({
     title: initialValues?.title ?? '',
     description: initialValues?.description ?? '',
-    status: initialValues?.status ?? 'todo',
+    status: isCreate ? 'todo' : (initialValues?.status ?? 'todo'),
     due_date: initialValues?.due_date ?? '',
   })
   const [errors, setErrors] = useState<Partial<Record<keyof TaskFormValues, string>>>({})
-
-  // Sync when initialValues change (e.g. when opening edit for a different task)
-  useEffect(() => {
-    if (initialValues) {
-      setValues({
-        title: initialValues.title ?? '',
-        description: initialValues.description ?? '',
-        status: initialValues.status ?? 'todo',
-        due_date: initialValues.due_date ?? '',
-      })
-      setErrors({})
-    }
-  }, [initialValues?.title, initialValues?.status, initialValues?.due_date, initialValues?.description])
 
   function validate(): boolean {
     const next: typeof errors = {}
@@ -114,18 +105,8 @@ export default function TaskForm({
           />
         </FormField>
 
-        {/* Status + Due date in a 2-column grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <FormField id="task-status" label="Status">
-            <select id="task-status" className={inputClass} {...field('status')}>
-              {STATUS_OPTIONS.map(o => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
-          </FormField>
-
+        {/* In edit mode: Status + Due date in 2-column grid. In create mode: Due date only */}
+        {isCreate ? (
           <FormField id="task-due-date" label="Due date">
             <input
               id="task-due-date"
@@ -134,7 +115,28 @@ export default function TaskForm({
               {...field('due_date')}
             />
           </FormField>
-        </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <FormField id="task-status" label="Status">
+              <select id="task-status" className={inputClass} {...field('status')}>
+                {STATUS_OPTIONS.map(o => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </FormField>
+
+            <FormField id="task-due-date" label="Due date">
+              <input
+                id="task-due-date"
+                type="date"
+                className={inputClass}
+                {...field('due_date')}
+              />
+            </FormField>
+          </div>
+        )}
       </div>
 
       {/* Modal Footer with Action Buttons */}
